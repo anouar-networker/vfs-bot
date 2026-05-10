@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 import time
 import random
 
-EMAIL = "anouar.1985@hotmail.it"
+EMAIL = "anouar.1989@live.it"
 PASSWORD = "Juvenet1@"
 
 LOGIN_URL = "https://visa.vfsglobal.com/mar/fr/login"
@@ -16,20 +16,33 @@ while True:
         with sync_playwright() as p:
 
             browser = p.chromium.launch(
-    headless=True,
-    args=["--no-sandbox"]
-)
+                headless=False,
+                args=[
+                    "--no-sandbox",
+                    "--disable-blink-features=AutomationControlled"
+                ]
+            )
 
             page = browser.new_page()
+
+            page.set_viewport_size({
+                "width": 1366,
+                "height": 768
+            })
 
             print("Opening login...", flush=True)
 
             page.goto(LOGIN_URL, timeout=120000)
 
-            time.sleep(5)
+            time.sleep(15)
 
-            # LOGIN
+            # DEBUG HTML
+            print(page.content()[:3000], flush=True)
+
+            print("Filling login...", flush=True)
+
             page.fill('input[type="email"]', EMAIL)
+
             page.fill('input[type="password"]', PASSWORD)
 
             print("Waiting Cloudflare...", flush=True)
@@ -46,23 +59,26 @@ while True:
 
             time.sleep(5)
 
+            selects = page.locator('select')
+
             # CENTRE
-            page.select_option(
-                'select',
+            selects.nth(0).select_option(
                 label='Centre de demande de visa pour la Suisse, Rabat'
             )
 
             time.sleep(2)
 
             # CATEGORY
-            selects = page.locator('select')
-
-            selects.nth(1).select_option(label='Visa Schengen type C')
+            selects.nth(1).select_option(
+                label='Visa Schengen type C'
+            )
 
             time.sleep(2)
 
             # SUBCATEGORY
-            selects.nth(2).select_option(label='Touriste')
+            selects.nth(2).select_option(
+                label='Touriste'
+            )
 
             time.sleep(10)
 
