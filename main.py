@@ -16,6 +16,7 @@ while True:
         with sync_playwright() as p:
 
             browser = p.chromium.launch(
+                channel="chrome",
                 headless=True,
                 args=[
                     "--no-sandbox",
