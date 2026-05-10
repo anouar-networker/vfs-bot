@@ -16,19 +16,28 @@ while True:
         with sync_playwright() as p:
 
             browser = p.chromium.launch(
-                headless=False,
+                headless=True,
                 args=[
                     "--no-sandbox",
-                    "--disable-blink-features=AutomationControlled"
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-dev-shm-usage"
                 ]
             )
 
-            page = browser.new_page()
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/122.0.0.0 Safari/537.36"
+                ),
+                viewport={
+                    "width": 1366,
+                    "height": 768
+                },
+                locale="fr-FR"
+            )
 
-            page.set_viewport_size({
-                "width": 1366,
-                "height": 768
-            })
+            page = context.new_page()
 
             print("Opening login...", flush=True)
 
@@ -36,8 +45,12 @@ while True:
 
             time.sleep(15)
 
-            # DEBUG HTML
-            print(page.content()[:3000], flush=True)
+            html = page.content()
+
+            print(html[:2000], flush=True)
+
+            if "cf-browser-verification" in html.lower():
+                print("⚠️ Cloudflare detected", flush=True)
 
             print("Filling login...", flush=True)
 
@@ -45,15 +58,13 @@ while True:
 
             page.fill('input[type="password"]', PASSWORD)
 
-            print("Waiting Cloudflare...", flush=True)
-
-            time.sleep(10)
+            time.sleep(5)
 
             page.click('button[type="submit"]')
 
-            time.sleep(10)
+            time.sleep(15)
 
-            print("Clicking reservation...", flush=True)
+            print("Click reservation...", flush=True)
 
             page.click("text=Démarrer une nouvelle réservation")
 
@@ -61,21 +72,18 @@ while True:
 
             selects = page.locator('select')
 
-            # CENTRE
             selects.nth(0).select_option(
                 label='Centre de demande de visa pour la Suisse, Rabat'
             )
 
             time.sleep(2)
 
-            # CATEGORY
             selects.nth(1).select_option(
                 label='Visa Schengen type C'
             )
 
             time.sleep(2)
 
-            # SUBCATEGORY
             selects.nth(2).select_option(
                 label='Touriste'
             )
