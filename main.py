@@ -55,9 +55,9 @@ while True:
 
             print("Filling login...", flush=True)
 
-            page.fill('input[type="email"]', EMAIL)
+            page.locator("input").nth(0).fill(EMAIL)
 
-            page.fill('input[type="password"]', PASSWORD)
+            page.locator("input").nth(1).fill(PASSWORD)
 
             time.sleep(5)
 
