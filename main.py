@@ -29,6 +29,7 @@ while True:
             time.sleep(10)
 
             content = page.content()
+            print(content[:5000], flush=True)
 
             unavailable = [
                 "No appointment slots available",
