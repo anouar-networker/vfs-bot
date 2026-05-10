@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 import time
 import random
 
-EMAIL = "anouar.1989@hotmail.it"
+EMAIL = "anouar.1985@hotmail.it"
 PASSWORD = "Juvenet1@"
 
 LOGIN_URL = "https://visa.vfsglobal.com/mar/fr/login"
