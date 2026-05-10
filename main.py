@@ -53,22 +53,22 @@ while True:
             if "cf-browser-verification" in html.lower():
                 print("⚠️ Cloudflare detected", flush=True)
 
-print("Waiting login form...", flush=True)
+            print("Waiting login form...", flush=True)
 
-page.wait_for_selector(
-    'input[formcontrolname="username"]',
-    timeout=60000
-)
+            page.wait_for_selector(
+                'input[formcontrolname="username"]',
+                timeout=60000
+            )
 
-print("Filling login...", flush=True)
+            print("Filling login...", flush=True)
 
-page.locator(
-    'input[formcontrolname="username"]'
-).fill(EMAIL)
+            page.locator(
+                'input[formcontrolname="username"]'
+            ).fill(EMAIL)
 
-page.locator(
-    'input[formcontrolname="password"]'
-).fill(PASSWORD)
+            page.locator(
+                'input[formcontrolname="password"]'
+            ).fill(PASSWORD)
 
             time.sleep(5)
 
